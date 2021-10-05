@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'ec_admin/dashboard.css' %}">
+
+
+
+    <link href="{% static 'ec_admin/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'ec_admin/css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="{% static 'ec_admin/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+
+</head>
+<body style="background-color: rgb(230, 230, 230);">
+
+    <style>
+
+        body{
+            overflow-x: hidden;
+        }
+
+        #side_bar{
+        
+            line-height: 60px;
+            text-align: center;
+            background-color:rgb(24, 24, 26);
+        }
+
+        a #main_but div:hover{
+            background-color: rgb(238, 164, 5);
+            color:rgb(24, 24, 26)
+        }
+
+        a #main_but div{
+            text-align: left;
+            margin-left: 25px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        #side_link{
+            text-decoration: none;
+        }
+
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="#">E-Voting System</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+             
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Admin
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'ec_admin:logout' %}">Logout</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                {% if user.is_authenticated %}
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Hello, @{{user.username}}</a>
+                {% endif %}
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+    
+
+    <div class="row">
+
+
+            <div class="col-lg-2 col-md-3" id="side_bar">
+                
+                <div class="row">
+                    <div class="col" style="text-align: left; color: rgb(196, 196, 196); margin-left: 25px; font-family: poppins; font-size: 19px;">
+                        EC's PANEL
+                    </div>
+                </div>
+
+
+                <a href="{% url 'ec_admin:dashboard' %}" id="side_link" role="button">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Dashboard
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'ec_admin:election_setup' %}" id="side_link">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Election Setup
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'ec_admin:add_candidate' %}" id="side_link" role="button">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Add Candidates
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'ec_admin:candidates' %}" id="side_link" role="button">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Candidates List
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'ec_admin:add_voter' %}" id="side_link" role="button">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Add Voter
+                        </div>
+                    </div>
+                </a>
+
+
+                <a href="{% url 'ec_admin:voter_register' %}" id="side_link" role="button">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Voter Register
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'ec_admin:results' %}" id="side_link">
+                    <div class="row my-1" id="main_but">
+                        <div class="col">
+                            Results
+                        </div>
+                    </div>
+                </a>
+                
+                <div class="row my-1" id="main_but">
+                    <div class="col" style="text-align: center;">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Upload Bulk Voters
+                        </button>
+                    </div>
+                </div>
+            
+
+            </div>
+
+            <div class="col-lg-10 col-md-9" style=" border-radius: 5px", id="side_link">
+
+                {% for message in messages %}
+
+                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert" style="margin-top:10px">
+                        
+                        <div>
+                        {{message}}
+                        </div>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                {% endfor %}
+
+                <div class="container">
+
+                    {% block content %}
+
+                    {% endblock %}
+
+                </div>
+
+            </div>
+
+    </div>
+
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Multiple Voters</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+
+                <div class="modal-body">
+
+                    
+                
+                        <form action="" class="row" method="" enctype="multipart/form-data">
+                            <div class="col-12 mb-3">
+                                <label for="file" class="form-label">Excel File</label>
+                                <input class="form-control" name="file" type="file" placeholder="Choose file" accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" >
+                            </div>
+                
+                            <div class="col-12 my-2">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                </div>
+                            </div>
+                            
+                
+                            <div class="col-12 mb-4">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </div>
+                        </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="text-align: center">
+        <div class="col-12" style="background-color:rgb(24, 24, 26); padding: 10px; color:rgb(230, 230, 230); text-align: center">
+            Copyright &copy; ToskyBrown Technology - <span class="text-muted">2021</span> 
+        </div>
+    </div>
+
+    <script src="{% static 'index/bs5/js/bootstrap.js' %}"></script>
+
+    <script src="{% static 'ec_admin/ajax/jquery.min.js' %}"></script>
+ 
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'ec_admin/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'ec_admin/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'ec_admin/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'ec_admin/js/sb-admin-2.min.js' %}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{% static 'ec_admin/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'ec_admin/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'ec_admin/js/demo/datatables-demo.js' %}"></script>
+
+</body>
+
+</html>

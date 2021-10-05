@@ -1,0 +1,75 @@
+{% extends 'ec_admin/admin_interface.html' %}
+
+
+
+
+{% block title %}
+    <title>Candidate List</title>
+{% endblock %}
+
+                    {% block content %}
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4" style="margin-top: 30px;">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Voter Register</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <th>Middle Name</th>
+                                            <th>Last Name</th>
+                                            <th>Gender</th>
+                                            <th>Date of Birth</th>
+                                            <th>Category</th>
+                                            <th>Election Name</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <th>Middle Name</th>
+                                            <th>Last Name</th>
+                                            <th>Gender</th>
+                                            <th>Date of Birth</th>
+                                            <th>Category</th>
+                                            <th>Election Name</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for data in candidate %}
+                                        <tr>
+                            
+                                            <td>{{data.first_name}}</td>
+                                            {% if data.middle_name %}
+                                            <td>{{data.middle_name}}</td>
+                                            {% else %}
+                                            <td></td>
+                                            {% endif %}
+                                            <td>{{data.last_name}}</td>
+                                            <td>{{data.gender}}</td>
+                                            <td>{{data.dob}}</td>
+                                            <td>{{data.category.category_name}}</td>
+                                            <td>{{data.category.election.election_name}}</td>
+                                            <td><a href="{% url 'ec_admin:edit_candidate' data.id %}" class="btn btn-primary">Edit</a></td>
+                                            <td> <a onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger" href="{% url 'ec_admin:delete_candidate' data.id %}">Delete</a> </td>
+
+                                        </tr>
+                                        {% endfor %}
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    {% endblock %}

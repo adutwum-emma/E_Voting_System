@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}">
+</head>
+<body style="background-color: rgb(39, 32, 32);">
+
+    {% for message in messages %}
+        <script>alert("{{message}}")</script>
+    {% endfor %}
+    
+    <div class="container" style="background-color: rgb(241, 241, 241); padding:20px; margin-top: 50px; width: 400px; border-radius: 7px; height: 400ox;">
+
+
+        <h4 class="text-muted" style="text-align: center;">Admin</h4>
+
+        <div style="text-align: center;">
+            <img class="img-fluid rounded" src="{% static 'index/admin.png' %}" alt="" style="width: 200px; margin: auto; text-align: center;">
+        </div>
+
+        <form action="" class="row g-3" method="post">
+
+            {% csrf_token %}
+
+            <div class="col-12">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="{{username}}" required>
+            </div>
+
+            <div class="col-12">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" required>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+
+        </form>
+
+        <hr>
+
+        <div class="text-muted" style="text-align: center;"> Copyright &COPY; ToskyBrown Technology - 2021</div>
+
+    </div>
+
+    <script src="{% static 'index/bs5/js/bootstrap.js' %}"></script>
+
+</body>
+</html>

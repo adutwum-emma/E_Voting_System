@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Voter</title>
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}"/>
+</head>
+<body style="background-color: silver;">
+    
+    <div class="container">
+        <form class="row g-3" id="edit" style="background-color: white; padding: 20px; margin-top: 10px; border-radius: 7px;">
+
+            {% csrf_token %}
+
+            <h5>Edit Voter</h5> <hr>
+
+            <div class="col-12">
+                <label for="username" class="form-label">User Name</label>
+                <input type="number" class="form-control" id="username" value="{{voter.user_name}}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" value="{{voter.first_name}}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="middle_name" class="form-label">Middle Name</label>
+                {% if voter.middle_name %}
+                    <input type="text" class="form-control" id="middle_name" value="{{voter.middle_name}}">
+                {% else %}
+                    <input type="text" class="form-control" id="middle_name">
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" value="{{voter.last_name}}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" required>
+                    {% if voter.gender == 'M' %}
+                        <option value="M" selected>Male</option>
+                        <option value="F">Female</option>
+                    {% elif voter.gender == "F" %}
+                        <option value="M">Male</option>
+                        <option value="F"selected>Female</option>
+                    {% else %}
+                        <option value="">Select gender...</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="col-md-8">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" value="{{voter.email}}" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" max="{{date_today}}" value="{{voter.dob|date:'Y-m-d'}}" required>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--<script src="{% static 'ec_admin/ajax/js/bootstrap.min.js' %}"></script>-->
+    <script src="{% static 'ec_admin/ajax/jquery.min.js' %}"></script>
+</body>
+
+<script>
+
+    $(document).on('submit', '#edit', function(e){
+
+        e.preventDefault();
+
+        $.ajax({
+
+            type:'POST',
+            url:'{% url "ec_admin:edit_voter" voter.id %}',
+            data:{
+                username:$('#username').val(),
+                first_name:$('#first_name').val(),
+                middle_name:$('#middle_name').val(),
+                last_name:$('#last_name').val(),
+                gender:$('#gender').val(),
+                dob:$('#dob').val(),
+                email:$('#email').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success:function(response){
+                alert(response);
+            },
+
+            error:function(){
+                alert("Error")
+            }
+        });
+
+    });
+
+</script>
+
+</html>

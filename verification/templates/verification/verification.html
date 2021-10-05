@@ -1,0 +1,116 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     {% load static %}
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Verification</title>
+     <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}"/>
+ </head>
+ <body style="background-color: rgb(219, 219, 219);">
+    
+
+    <div class="container mt-4" style="background-color: white; padding: 20px; border-radius: 7px; width: 400px; box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2)">
+
+        <h5 style="text-align: center; background-color:rgb(3, 17, 54); padding: 20px; color:rgb(211, 211, 211); border-radius: 6px; margin-bottom: 20px;">Verification Box</h5>
+
+        <div style="text-align: center;">
+
+        </div>
+
+        <form class="row g-3" id="verification-form">
+            {% csrf_token %}
+            <div class="col-12" style="margin-bottom: 10px;">
+                <input type="text" class="form-control" id="VoterID" placeholder="Voter ID">
+            </div>
+           
+            <div class="col-12" style="margin-bottom: 10px; text-align: center;">
+                <button class="btn btn-primary" style="width: 40%;">Verify</button>
+            </div>
+        </form>
+
+        <hr>
+        <center>
+            <span class="text-muted" style="font-size: 14px;">Copyright &copy; ToskyBrown Technology - 2021</span>
+        </center>
+
+    </div>
+
+    <div class="container mt-4" style="background-color: white; padding: 20px; border-radius: 7px; width: 400px;">
+        <div class="row">
+            <div class="col-12">
+                <h5> <strong id="message-lb">Password: </strong> <span id="the_password"></span>  </h5>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script src="{% static 'ec_admin/ajax/jquery.min.js' %}"></script>
+
+ </body>
+
+ <script type="text/javascript">
+
+    $(document).on('submit', '#verification-form', function(e){
+
+        var pass = document.getElementById("the_password")
+        var pass_field = document.getElementById("VoterID")
+        var message_label = document.getElementById("message-lb")
+
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = ""
+        
+        e.preventDefault();
+
+        $.ajax({
+
+            type:'POST',
+            url:'{% url "verification:voter_verification" %}',
+            data:{
+                voter_id:$('#VoterID').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            
+            success:function(response){
+                if(response.endsWith("verified</span>")){
+
+                    pass.innerHTML = response;
+                    msg.text = "Already verified";
+                    message_label.innerHTML = "Message: ";
+                    window.speechSynthesis.speak(msg);
+
+                }else if(response.endsWith("exist</span>")){
+                    
+                    pass.innerHTML = response;
+                    msg.text = "Voter ID does not exist";
+                    message_label.innerHTML = "Message: ";
+                    window.speechSynthesis.speak(msg);
+
+                }else{
+
+                    pass.innerHTML = response;
+                    msg.text = "Verified";
+                    message_label.innerHTML = "Password: ";
+                    window.speechSynthesis.speak(msg);
+
+                }
+                
+
+            }
+
+        });
+
+    });
+
+    $(document).on('click', '#VoterID', function(e){
+
+        e.innerHTML = ""
+
+    });
+        
+
+ </script>
+
+ </html>

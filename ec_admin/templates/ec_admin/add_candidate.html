@@ -1,0 +1,76 @@
+{% extends 'ec_admin/admin_interface.html' %}
+
+{% block title %}
+    <title>Add Candidate</title>
+{% endblock %}
+
+
+    {% block content %}
+    
+    <div class="container px-4" style="background-color: white; padding: 20px; margin-top: 20px; border-radius: 5px;  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2)">
+
+        <div class="row">
+            <div class="col-12">
+                <h5 class="text-muted">Add Candidate</h5> 
+            </div>
+        </div>
+
+        <hr>
+
+        <form class="row g-3" action="" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="col-12">
+                <label class="form-label" for="first_name">First Name</label>
+                <input type="text" class="form-control" placeholder="First Name" name="first_name" id="first_name" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="middle_name">Middle Name</label>
+                <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" id="middle_name">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="last_name">Last Name</label>
+                <input type="text" class="form-control" placeholder="Last Name" name="last_name" id="last_name" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" name="dob" id="dob" max="2010-12-31">
+            </div>
+
+            <div class="col-md-6">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="">Option...</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="pic" class="form-label">Profile Pic</label>
+                <input type="file" accept=".jpg,.jpeg,.png" name="file" id="pic" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="category" class="form-label">Candidate Category</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option value="">Option...</option>
+                    {% for data in election.category_set.all %}
+                        <option value="{{data.id}}">{{data.category_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </div>
+
+        </form>
+    </div>
+
+    {% endblock %}
+    

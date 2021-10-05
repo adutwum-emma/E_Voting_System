@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Register</title>
+</head>
+<body>
+
+    <style>
+        tr{
+            font-size: 13px;
+        }
+
+        .data-list{
+            padding: 6px; border-bottom: 1px solid rgb(184, 184, 184);
+        }
+
+    </style>
+
+    <h3 style="font-size: 14px;">Voter Register <small>{{my_date.today}}</small> </h3> <br>
+        
+
+        <table>
+            <thead style="padding: 6px;">
+                <tr style="text-align: center; color: black; background-color: rgb(236, 236, 236); padding: 7px;">
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Date of Birth</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+
+            <tbody style="text-align: center;">
+                {% for data in voter %}
+                <tr class="data-list">
+                    <td>{{data.user_name}}</td>
+                    <td>{{data.first_name}}</td>
+                    <td style="width: 100px;">{{data.middle_name}}</td>
+                    <td>{{data.last_name}}</td>
+                    <td>{{data.gender}}</td>
+                    <td>{{data.dob}}</td>
+                    <td>{{data.age}} year(s)</td>
+                </tr>
+                {% endfor %}
+            
+            </tbody>
+        </table>
+    
+</body>
+</html>    

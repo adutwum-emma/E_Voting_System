@@ -1,0 +1,140 @@
+{% extends 'ec_admin/admin_interface.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    <title>Dashboard</title>
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'ec_admin/dashboard.css' %}">
+</head>
+<body style="background-color: rgb(233, 233, 233);">
+
+    {% block content %}
+
+    <div class="card" style="background-color: rgb(63, 58, 58); padding: 20px; margin-top:10px; border-radius: 6px;">
+
+        <div class="card-header">
+            Admin dashboard
+        </div>
+
+        <div class="card-body">
+
+                <form class="row g-3 mt-3" method="post" action="{% url 'ec_admin:start_election' %}" style="background-color: white; padding: 10px; border-radius: 7px;">
+
+                    {% csrf_token %}
+                    
+                    <h5>Election Control</h5> <hr>
+        
+                    <div class="col-md-12">
+                        <label for="elect" class="form-label">Select Election</label>
+                        
+                        <select name="election" id="elect" class="form-select" required>
+                            <option value="">Select Election...</option>
+                            {% for data in user.election_set.all %}
+
+                                {% if data.has_started %}
+
+                                {% else %}
+                                    <option value="{{data.id}}">{{data.election_name}}</option>
+                                {% endif %}
+                                
+                            {% endfor %}
+                        </select>
+                       
+                    </div>
+        
+                    <div class="col-md-3">
+                        
+                        {% if election.has_started == 1 and election.has_closed == 0 %}
+                            <button class="btn btn-primary disabled">Start Election</button>
+                        {% elif election.has_closed == 1 %}
+                            <button class="btn btn-primary">Start Election</button>
+                        {% else %}
+                            <button class="btn btn-primary">Start Election</button>
+                        {% endif %}
+
+                      
+                    </div>
+        
+                    <div class="col-md-6">
+        
+                    </div>
+        
+                    <div class="col-md-3">
+                        {% if election.has_started == 1 and election.has_closed == 0 %}
+                            <a onclick="return confirm('Are you sure you want to close election?')" href="{% url 'ec_admin:close_election' election.id %}" class="btn btn-danger">Close Election</a>
+                        {% endif %}
+                    </div>
+                </form>
+        
+                <div class="row my-3" style="text-align: center;">
+                    <div class="col-md-4" id="top-box">
+                        <div class="card">
+                            <div class="card-header text-muted">
+                                <h6>Registered Voters</h6>
+                            </div>
+                            <div class="car-body">
+                                <h2>{{voter.count}}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" id="top-box">
+                        <div class="card">
+                            <div class="card-header text-muted">
+                                <h6>Total Votes for Current Elections</h6>
+                            </div>
+                            <div class="car-body">
+                                <h2>{{count_voters.count}}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" id="top-box">
+                        <div class="card">
+                            <div class="card-header text-muted">
+                                <h6>Number of Elections</h6>
+                            </div>
+                            <div class="car-body">
+                                <h2>{{election_count.count}}</h2>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-md-6 mt-3" id="top-box">
+                        <div class="card" style="text-align: center;">
+                            <div class="card-header">
+                                <h6>Time</h6>
+                            </div>
+                            <div class="car-body" style="margin-left: 10px;">
+                                <h6> <small class="text-muted">Started:</small> {{election.time_to_start}}</h6>
+                                <h6> <small class="text-muted">Time to End:</small> {{election.time_to_end}}</h6>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-md-6 mt-3" id="top-box">
+                        <div class="card">
+                            <div class="card-header text-muted">
+                                <h6>Current Election</h6>
+                            </div>
+                            <div class="car-body" style="margin-left: 10px;">
+                                <h2>{{election.election_name}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+    </div>  
+
+    {% endblock %}
+
+    <script src="bs5/js/bootstrap.js"></script>
+</body>
+</html>

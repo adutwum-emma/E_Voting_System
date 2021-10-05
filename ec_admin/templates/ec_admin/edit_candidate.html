@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+        <title>Edit Candidate</title>
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}"/>
+</head>
+<body style="background-color: silver;">
+
+    
+    <div class="container px-4" style="background-color: white; padding: 20px; margin-top: 20px; border-radius: 5px;  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2)">
+
+        <div class="row">
+            <div class="col-12">
+                <h5 class="text-muted">Edit Candidate</h5> 
+            </div>
+        </div>
+
+        <hr>
+
+        <form class="row g-3" id="edit-candidate">
+
+            {% csrf_token %}
+
+            <div class="col-12">
+                <label class="form-label" for="first_name">First Name</label>
+                <input type="text" class="form-control" placeholder="First Name" name="first_name" id="first_name" value="{{candidate.first_name}}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="middle_name">Middle Name</label>
+                {% if candidate.middle_name %}
+                <input type="text" class="form-control" placeholder="Middle Name" id="middle_name" value="{{candidate.middle_name}}">
+                {% else %}
+                <input type="text" class="form-control" placeholder="Middle Name" id="middle_name">
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="last_name">Last Name</label>
+                <input type="text" class="form-control" placeholder="Last Name" id="last_name" required value="{{candidate.last_name}}">
+            </div>
+
+            <div class="col-md-6">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" id="dob" value="{{candidate.dob|date:'Y-m-d'}}">
+            </div>
+
+            <div class="col-md-6">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" required>
+                    {% if candidate.gender == "M" %}
+                    <option value="M" selected>Male</option>
+                    <option value="F">Female</option>
+                    {% else %}
+                    <option value="M">Male</option>
+                    <option value="F" selected>Female</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="pic" class="form-label">Profile Pic</label>
+                <a href="{{candidate.profile_pic.url}}">{{candidate.profile_pic}}</a>
+                <input type="file" accept=".jpg,.jpeg,.png" id="pic" class="form-control">
+            </div>
+            
+
+            <div class="col-md-6">
+                <label for="category" class="form-label">Candidate Category</label>
+                <select class="form-select" id="category" required>
+                    {% for data in election.category_set.all %}
+                        {% if candidate.category.id == data.id %}
+                            <option value="{{data.id}}" selected>{{data.category_name}}</option>
+                        {% else %}
+                            <option value="{{data.id}}">{{data.category_name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--<script src="{% static 'ec_admin/ajax/js/bootstrap.min.js' %}"></script>-->
+    <script src="{% static 'ec_admin/ajax/jquery.min.js' %}"></script>
+</body>
+
+<script>
+    $(document).on('submit', '#edit-candidate', function(e){
+
+        e.preventDefault();
+
+        $.ajax({
+
+            type:'POST',
+            url:"{% url 'ec_admin:edit_candidate' candidate.id %}",
+            mimeType:'multipart/form-data', 
+            data:{
+                first_name:$('#first_name').val(),
+                middle_name:$('#middle_name').val(),
+                last_name:$('#last_name').val(),
+                dob:$('#dob').val(),
+                category:$('#category').val(),
+                gender:$("#gender").val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success:function(response){
+                alert(response)
+            },
+
+            error:function(){
+                alert("Error")
+            }
+
+        });
+
+    });
+</script>
+
+</html>
+    

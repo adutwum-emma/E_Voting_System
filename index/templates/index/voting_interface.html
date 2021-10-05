@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}">
+</head>
+<body style="overflow-x: hidden;">
+
+    <style>
+        [class*="col"]{
+            margin-top: 15px;
+        }
+
+        label:hover{
+            cursor: pointer;
+        }
+
+        label:focus{
+            border: 1px solid red;
+        }
+
+        #my_row{
+            background-color: rgb(224, 224, 224);
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        img{
+            height: 200px;
+            width: 300px;
+            object-fit: contain;
+            border-radius: 70px;
+        }
+    </style>
+    
+    <div class="row">
+
+        <div class="row" id="my_row" style="font-size: 17px; font-family: poppins; color: rgb(255, 253, 253); background-color:rgb(56, 54, 54)">
+            <div class="container-fluid" style="text-align: center;">
+                {{election.election_name.upper}} - <span class="text-muted">{{election.time_to_start.date.year}}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        
+
+        <form method="post" action="">
+
+            {% csrf_token %}
+
+            {% for ele in election.category_set.all %}
+
+            
+            <div class="row" id="my_row" style="font-size: 17px; font-family: poppins; text-align: center; color: rgb(56, 54, 54)">
+                {{ele.category_name.upper}}
+            </div>
+
+            <div class="row">
+
+
+                {% for candidate in ele.candidate_set.all %}
+                
+                <div class="col-md-4 col-sm-6 col-lg-4">
+                    <div class="form-check">
+                        
+                        <label class="form-check-label" for="candidate{{candidate.id}}">
+
+                            <div class="card">
+
+                                <div class="card-body">
+
+                                    {% if candidate.middle_name %}
+
+                                    <div class="card-title">{{candidate.first_name}} {{candidate.middle_name}} {{candidate.last_name}}</div>
+
+                                    {% else %}
+
+                                    <div class="card-title">{{candidate.first_name}} {{candidate.last_name}}</div>
+
+                                    {% endif %}
+
+                                    <img class="card-img-top" src="{{candidate.profile_pic.url}}" id="image">
+                                </div>
+                                
+                            </div>
+
+                        </label>
+
+                        <input class="form-check-input" type="radio" name="{{candidate.category.id}}" id="candidate{{candidate.id}}" autocomplete="off" value="{{candidate.id}}" required>
+                      </div>
+                </div>
+                
+
+                {% endfor %}
+
+
+            </div>
+
+            <hr>
+
+            {% endfor %} 
+
+
+            <div class="row" style="text-align: center;">
+
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-lg" style="margin-top: 5px; margin-bottom: 5px;">Vote</button>
+                </div>
+                
+                <div class="col-md-6">
+                    <a href="{% url 'index:voter_logout' %}" style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-danger btn-lg">Cancel</a>
+                </div>
+                
+            </div>
+
+        </form>
+
+    </div>
+
+    <script src="{% static 'index/bs5/js/bootstrap.css' %}"></script>
+</body>
+</html>

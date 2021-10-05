@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'index/bs5/css/bootstrap.css' %}"/>
+    <title>Results{{election.election_name}}</title>
+</head>
+<body style="background:rgb(224, 224, 224)">
+
+
+    <div class="container" style="background-color: white;">
+
+        <div class="container mb-3">
+            <h4 style="text-align: center;"> {{election.election_name}} RESULTS</h4>
+            <h5>Time Started:  {{election.real_time_started}}</h5>
+            <h5>Time Ended:  {{election.real_time_ended}}</h5>
+            <a style="width: 200px;" href="{% url 'ec_admin:result_pdf' %}" class="btn btn-primary">Print</a> <hr>
+        </div>
+    
+        {% for data in election.category_set.all %}
+    
+            <div class="container">
+    
+                <h5 style="text-align: left; color: black; background-color: rgb(236, 236, 236); padding: 7px; font-size: 14px; margin-bottom: 0px;">{{data.category_name}}</h5>
+    
+                <table class="table table-dark">
+                    <th>Total Votes Count</th>
+                    <td>{{data.vote_set.count}} </td>
+                </table>
+            </div>
+    
+            <div class="container" id="get-list">
+                <table class="table mt-3">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Full Name</th>
+                            <th>Total Votes</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for results in data.candidate_set.all %}
+                        <tr style="font-weight: bold;" id="table">
+                            <td><img src="{{results.profile_pic.url}}" style="width: 200px; border-radius: 70px;"></td>
+                            {% if results.middle_name %}
+                            <td>{{results.first_name}} {{results.last_name}} {{results.middle_name}}</td>
+                            {% else %}
+                            <td>{{results.first_name}} {{results.last_name}}</td>
+                            {% endif %}
+                            <td>{{results.vote_set.count}}</td>
+                        </tr>
+                        {% endfor %}
+                    
+                    </tbody>
+                </table>
+            </div>
+            
+        {% endfor%}
+
+    </div>
+
+    
+    <script src="{% static 'ec_admin/ajax/jquery.min.js' %}"></script>
+    <script src="bs5/js/bootstrap.js"></script>
+</body>
+
+<script>
+
+    var total = 0;
+
+    $(document).ready(function(){
+
+        
+
+    });
+
+</script>
+
+</html>    

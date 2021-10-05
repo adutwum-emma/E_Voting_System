@@ -1,0 +1,71 @@
+{% extends 'ec_admin/admin_interface.html' %}
+
+{% block title %}
+    <title>Election Setup</title>
+{% endblock %}
+
+
+    {% block content %}
+
+    <div class="container" style="background-color: white; padding: 20px; margin-top: 20px; border-radius: 6px; box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2)">
+
+        <h5 class="text-muted">Election Set-Up</h5> <hr>
+
+        <form class="row g-3"  action="{% url 'ec_admin:set_up' %}" method="post" method="post">
+
+            {% csrf_token %}
+
+            <div class="col-12">
+                <label for="election_name" class="form-label">Election Name</label>
+                <input type="text" class="form-control" name="election" placeholder="Election name" id="election_name" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="date_to_start" class="form-label">DateTime-to-Start</label>
+                <input type="datetime-local" class="form-control" name="date_to_start" id="date_to_start" required>
+            </div>
+
+            
+            <div class="col-md-6">
+                <label for="date_to_end" class="form-label">DateTime-to-End</label>
+                <input type="datetime-local" class="form-control" name="date_to_end" id="date_to_end" required>
+            </div>
+
+
+            <div class="col-12">
+                <button class="btn btn-primary">Setup</button>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="container" style="background-color: white; margin-top: 20px; padding: 20px; border-radius: 6px; box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);">
+
+        <h5 class="text-muted">Add Election Category</h5> <hr>
+
+       <form action="{% url 'ec_admin:add_category' %}" method="post" class="row g-3">
+
+           {% csrf_token %}
+
+            <div class="col-md-4">
+                <label for="election" class="form-label">Election</label>
+                <select class="form-select" id="election" name="election" required>
+                    <option value="">Option...</option>
+                    {% for data in user.election_set.all %}
+                        <option value="{{data.id}}">{{data.election_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-8">
+                <label for="category_name" class="form-label">Category Name</label>
+                <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Category Name" required>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary">Save</button>
+            </div>
+       </form>
+    </div>
+
+    {% endblock %}
