@@ -406,17 +406,33 @@ def edit_candidate(request, candidate_id):
         last_name = request.POST["last_name"]
         dob = request.POST["dob"]
         gender = request.POST["gender"]
+        old_pic = request.POST['old_pic']
         category_id = request.POST["category"]
 
-        category = Category.objects.get(id=category_id)
+        try:
+            pic = request.FILES["pic"]
+            category = Category.objects.get(id=category_id)
 
-        candidate = Candidate.objects.get(id=candidate_id)
-        candidate.first_name=first_name
-        candidate.middle_name=middle_name
-        candidate.last_name=last_name
-        candidate.gender=gender
-        candidate.category=category
-        candidate.save()
+            candidate = Candidate.objects.get(id=candidate_id)
+            candidate.first_name=first_name
+            candidate.middle_name=middle_name
+            candidate.last_name=last_name
+            candidate.gender=gender
+            candidate.profile_pic=pic
+            candidate.category=category
+            candidate.save()
+        except KeyError:
+            
+            category = Category.objects.get(id=category_id)
+
+            candidate = Candidate.objects.get(id=candidate_id)
+            candidate.first_name=first_name
+            candidate.middle_name=middle_name
+            candidate.last_name=last_name
+            candidate.gender=gender
+            candidate.profile_pic=old_pic
+            candidate.category=category
+            candidate.save()
 
         return HttpResponse("Updated successfully")
 

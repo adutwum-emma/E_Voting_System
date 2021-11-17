@@ -35,25 +35,25 @@
             <div class="col-md-6">
                 <label class="form-label" for="middle_name">Middle Name</label>
                 {% if candidate.middle_name %}
-                <input type="text" class="form-control" placeholder="Middle Name" id="middle_name" value="{{candidate.middle_name}}">
+                <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" id="middle_name" value="{{candidate.middle_name}}">
                 {% else %}
-                <input type="text" class="form-control" placeholder="Middle Name" id="middle_name">
+                <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" id="middle_name">
                 {% endif %}
             </div>
 
             <div class="col-md-6">
                 <label class="form-label" for="last_name">Last Name</label>
-                <input type="text" class="form-control" placeholder="Last Name" id="last_name" required value="{{candidate.last_name}}">
+                <input type="text" class="form-control" placeholder="Last Name" name="last_name" id="last_name" required value="{{candidate.last_name}}">
             </div>
 
             <div class="col-md-6">
                 <label for="dob" class="form-label">Date of Birth</label>
-                <input type="date" class="form-control" id="dob" id="dob" value="{{candidate.dob|date:'Y-m-d'}}">
+                <input type="date" class="form-control" name="dob" id="dob" value="{{candidate.dob|date:'Y-m-d'}}">
             </div>
 
             <div class="col-md-6">
                 <label for="gender" class="form-label">Gender</label>
-                <select class="form-select" id="gender" required>
+                <select class="form-select" id="gender" name="gender" required>
                     {% if candidate.gender == "M" %}
                     <option value="M" selected>Male</option>
                     <option value="F">Female</option>
@@ -65,15 +65,16 @@
             </div>
 
             <div class="col-md-6">
+                <input type="hidden" name="old_pic" value="{{candidate.profile_pic}}">
                 <label for="pic" class="form-label">Profile Pic</label>
                 <a href="{{candidate.profile_pic.url}}">{{candidate.profile_pic}}</a>
-                <input type="file" accept=".jpg,.jpeg,.png" id="pic" class="form-control">
+                <input type="file" accept=".jpg,.jpeg,.png" name="pic" id="pic" class="form-control">
             </div>
             
 
             <div class="col-md-6">
                 <label for="category" class="form-label">Candidate Category</label>
-                <select class="form-select" id="category" required>
+                <select class="form-select" name="category" id="category" required>
                     {% for data in election.category_set.all %}
                         {% if candidate.category.id == data.id %}
                             <option value="{{data.id}}" selected>{{data.category_name}}</option>
@@ -84,11 +85,17 @@
                 </select>
             </div>
 
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Update</button>
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary" id="update_but">Update</button>
             </div>
 
         </form>
+
+    </div> <br>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert" style="display: none;">
+        <strong> Updated success! </strong> <span id="main_text"></span>
+        <button class="btn-close"id="close_button"></button>
     </div>
 
 
@@ -102,22 +109,22 @@
 
         e.preventDefault();
 
+        var data = new FormData($('#edit-candidate').get(0));
+
+        $("#update_but").text("Updating...")
+
         $.ajax({
 
             type:'POST',
             url:"{% url 'ec_admin:edit_candidate' candidate.id %}",
-            mimeType:'multipart/form-data', 
-            data:{
-                first_name:$('#first_name').val(),
-                middle_name:$('#middle_name').val(),
-                last_name:$('#last_name').val(),
-                dob:$('#dob').val(),
-                category:$('#category').val(),
-                gender:$("#gender").val(),
-                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-            },
+            data: data,
+            contentType:'multipart/form-data',
+            contentType: false,
+            processData: false, 
             success:function(response){
-                alert(response)
+                $("#update_but").text("Save")
+                $("#alert").show()
+                $("#main_text").text("Updated successfully")
             },
 
             error:function(){
@@ -125,6 +132,12 @@
             }
 
         });
+
+    });
+
+    $("#close_button").click(function(){
+
+        $("#alert").hide();
 
     });
 </script>
